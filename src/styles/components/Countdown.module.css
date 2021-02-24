@@ -14,7 +14,7 @@
   
   
   background: var(--white);
-  box-shadow: 0 0 60 rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0 60px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
   font-size: 8.5rem;
   text-align: center;
