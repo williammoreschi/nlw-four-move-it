@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useState } from "react";
+import { createContext, ReactNode, useEffect, useState } from "react";
 import  challenges from '../../challenges.json';
 
 interface IChallenge{
@@ -18,6 +18,8 @@ interface IChallengesContextData{
   completeChallenge: () => void;
 }
 
+const iconsNotification = ['🎯','♟️','⛰️','🎉','🥇','🏹','✌️','👋','🤔','🤖','👌','🧠','👀'];
+
 interface IChallengesProviderProps{
   children: ReactNode;
 }
@@ -31,15 +33,27 @@ export function ChallengesProvider({children}:IChallengesProviderProps){
 
   const experienceToNextLevel = Math.pow((level + 1) * 4,2);
 
+  useEffect(() => {
+    Notification.requestPermission();
+  },[]);
+
   function levelUp(){
     setLevel(level+1);
   }
 
   function startNewChallenge(){
     const randomChallengeIndex = Math.floor(Math.random() * challenges.length);
+    const randomIconsNotificationIndex = Math.floor(Math.random() * iconsNotification.length);
     const challenge = challenges[randomChallengeIndex];
+    const iconSelect = iconsNotification[randomIconsNotificationIndex];
 
     setActiveChallenge(challenge);
+
+    if(Notification.permission === 'granted'){
+      new Notification(`Novo desafio ${iconSelect}`, {
+        body: `Valendo ${challenge.amount}xp!`
+      })
+    }
   }
   
   function resetChallenge(){
