@@ -1,5 +1,4 @@
 import Cookies from 'js-cookie';
-import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from "react";
 import { Seo } from "../components/Seo";
@@ -23,7 +22,7 @@ export default function Home() {
         login: data.login
       };
       Cookies.set('user',JSON.stringify(user));
-      router.push('/exercise');
+      router.push('/');
     } catch (err) {
       alert("Github não responde");
     }

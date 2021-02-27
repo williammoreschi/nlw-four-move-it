@@ -15,6 +15,7 @@ interface HomeProps {
   level: number;
   currentExperience: number;
   challengesCompleted: number;
+  user: string;
 }
 
 export default function Home(props:HomeProps) {
@@ -46,7 +47,15 @@ export default function Home(props:HomeProps) {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
-  const  {level, currentExperience, challengesCompleted} = ctx.req.cookies;
+  const  {level, currentExperience, challengesCompleted, user} = ctx.req.cookies;
+  if(user === undefined){
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/login',
+      },
+    }
+  }
   return {
     props: {
       level:Number(level),
