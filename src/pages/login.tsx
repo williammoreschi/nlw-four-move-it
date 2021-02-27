@@ -1,4 +1,5 @@
 import Cookies from 'js-cookie';
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from "react";
 import { Seo } from "../components/Seo";
@@ -51,3 +52,16 @@ export default function Home() {
   </>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const  {user} = ctx.req.cookies;
+  if(user !== undefined){
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/',
+      },
+    }
+  }
+}
+
