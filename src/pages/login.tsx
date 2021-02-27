@@ -1,32 +1,16 @@
-import Cookies from 'js-cookie';
+
 import { GetServerSideProps } from 'next';
-import { useRouter } from 'next/router';
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Seo } from "../components/Seo";
+import { AuthContext } from '../contexts/AuthContext';
 import styles from "../styles/components/Login.module.css";
 
-export default function Home() {
+export default function Home(props) {
   const [userName,setUserName] = useState('');
-  const router  = useRouter();
+  const { singIn } = useContext(AuthContext);
 
   const handleSingIn = async ()=>{
-    try {
-      const response = await fetch(`https://api.github.com/users/${userName}`);
-      const data = await response.json();
-      if(data.message){
-        alert(`${data.message === 'Not Found' ? 'Seu usuário não foi encontrado' : data.message}`);
-        return;
-      }
-      const user = {
-        avatar_url: data.avatar_url,
-        name: data.name,
-        login: data.login
-      };
-      Cookies.set('user',JSON.stringify(user));
-      router.push('/');
-    } catch (err) {
-      alert("Github não responde");
-    }
+    singIn(userName);
   }
   return (
   <>
@@ -62,6 +46,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         destination: '/',
       },
     }
+  }
+  return {
+    props: {}
   }
 }
 

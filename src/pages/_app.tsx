@@ -1,7 +1,11 @@
+import { GetServerSideProps } from 'next';
+import { AuthContextProvider } from '../contexts/AuthContext'
 import '../styles/global.css'
 function MyApp({ Component, pageProps }) {
   return (
-    <Component {...pageProps} />
+    <AuthContextProvider>
+      <Component {...pageProps} />
+    </AuthContextProvider>
   )
 }
 
