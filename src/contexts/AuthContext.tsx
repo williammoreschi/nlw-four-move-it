@@ -25,16 +25,19 @@ export function AuthContextProvider({children}:IAuthContextProps){
   const router  = useRouter();
   const [userAuth,setUserAuth] = useState<IUser>({} as IUser);
   useEffect(()=>{
-    const userCookie = Cookies.get('user');
-    if(typeof(userCookie) !== 'undefined'){
-      const userCookieParse = JSON.parse(userCookie) as IUser;
-      const userParams = {
-        avatar_url: userCookieParse.avatar_url ?? '',
-        name: userCookieParse.name ?? '',
-        login: userCookieParse.login ?? '',
-      };
-      setUserAuth(userParams)
+    async function loadUserCookie():Promise <void>{
+      const userCookie = Cookies.get('user');
+      if(typeof(userCookie) !== 'undefined'){
+        const userCookieParse = JSON.parse(userCookie) as IUser;
+        const userParams = {
+          avatar_url: userCookieParse.avatar_url ?? '',
+          name: userCookieParse.name ?? '',
+          login: userCookieParse.login ?? '',
+        };
+        setUserAuth(userParams)
+      }
     }
+    loadUserCookie();
   },[]);
 
   async function singIn(userName:string){
