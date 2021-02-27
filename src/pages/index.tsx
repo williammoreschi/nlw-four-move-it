@@ -9,6 +9,7 @@ import { CountdownProvider } from '../contexts/CountdownContext';
 
 import styles from "../styles/components/Home.module.css";
 import { ChallengesProvider } from '../contexts/ChallengesContext';
+import { Seo } from '../components/Seo';
 
 interface HomeProps {
   level: number;
@@ -24,9 +25,7 @@ export default function Home(props:HomeProps) {
       challengesCompleted={props.challengesCompleted}
     >
       <div className={styles.container}>
-        <Head>
-          <title>Início | move.it</title>
-        </Head>
+       <Seo title="Move it | Início" />
         <ExperienceBar />
         <CountdownProvider>
           <section>
