@@ -74,7 +74,6 @@
 
 
 .container section div button{
-  background: var(--blue-dark);
   border:none;
   display: flex;
   padding: 0 1.3rem;
@@ -82,14 +81,16 @@
   justify-content: center;
   transition: background-color 0.2s;
   outline: var(--blue);
+  background: var(--green);
 }
 .container section div button:not(:disabled):hover{
-  background: var(--green);
+  filter: brightness(0.9);
 }
 
 .container section div button:disabled{
   opacity: 0.6; 
   cursor: not-allowed;
+  background: var(--blue-dark);
 }
 
 @media(max-width: 720px){
