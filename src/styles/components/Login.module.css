@@ -16,11 +16,22 @@
   max-width: 360px;
 }
 .container section strong{
-  margin: 1.5rem 0;
+  margin-top: 1.5rem;
   display: block;
   color: var(--white);
   font-weight: 600;
   font-size: 2rem;
+}
+.container section small{
+  margin-bottom: 1.5rem;
+  color:var(--white);
+  display: block;
+}
+
+.container section small kbd{
+  font-weight: 600;
+  color: var(--green);
+  cursor: pointer;
 }
 
 .container section p{

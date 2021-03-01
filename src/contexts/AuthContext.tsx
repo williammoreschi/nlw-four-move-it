@@ -42,6 +42,16 @@ export function AuthContextProvider({children}:IAuthContextProps){
   },[]);
 
   async function singIn(userName:string){
+    if(userName === 'move.it'){
+      const userData = {
+        avatar_url: "/favicon.png",
+        name: "Move.it",
+        login: "move.it"
+      };
+      Cookies.set('user',JSON.stringify(userData));
+      router.push('/');
+      return;
+    }
     try {
       const response = await fetch(`https://api.github.com/users/${userName}`);
       const data = await response.json();
