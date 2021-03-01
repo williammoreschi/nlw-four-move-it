@@ -10,6 +10,7 @@ interface IUser{
 
 interface IAuthContextData{
   singIn: (userName:string) => void;
+  singOut: () => void;
   userAuth: IUser;
 }
 
@@ -60,10 +61,19 @@ export function AuthContextProvider({children}:IAuthContextProps){
     }
   }
 
+  function singOut(){
+    Cookies.remove('user');
+    Cookies.remove('challengesCompleted');
+    Cookies.remove('level');
+    Cookies.remove('challengesCompleted');
+    router.push('/login');
+  }
+
   return (
     <AuthContext.Provider value={{
       userAuth,
-      singIn
+      singIn,
+      singOut
     }}>
       {children}
     </AuthContext.Provider>

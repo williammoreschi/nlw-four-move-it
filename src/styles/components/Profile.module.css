@@ -9,8 +9,11 @@
   border-radius: 50%;
 }
 
-.profileContainer div{
+.profileContainer > div{
   margin-left: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 .profileContainer div strong{
@@ -19,9 +22,26 @@
   color: var(--title);
 }
 
+.profileContainer > div > div{
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+}
+
 .profileContainer div p{
   font-size: 1rem;
-  margin-top: 0.5rem;
+}
+.profileContainer div button{
+  background: transparent;
+  border: none;
+  color: var(--text);
+}
+
+.profileContainer div button:hover{
+  color: var(--title);
 }
 
 .profileContainer div p img{
