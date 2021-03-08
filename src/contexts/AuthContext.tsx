@@ -1,3 +1,4 @@
+import { signIn as nextSignIn, signOut as nextSignOut, getSession } from 'next-auth/client';
 import { createContext, ReactNode, useEffect, useState } from "react";
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
@@ -5,11 +6,11 @@ import { useRouter } from 'next/router';
 interface IUser{
   avatar_url: string;
   name: string;
-  login: string;
+  email: string;
 }
 
 interface IAuthContextData{
-  singIn: (userName:string) => void;
+  singIn: (providerAuth:string) => void;
   singOut: () => void;
   userAuth: IUser;
 }
@@ -25,57 +26,31 @@ export const AuthContext = createContext({} as IAuthContextData);
 export function AuthContextProvider({children}:IAuthContextProps){
   const router  = useRouter();
   const [userAuth,setUserAuth] = useState<IUser>({} as IUser);
-  useEffect(()=>{
-    async function loadUserCookie():Promise <void>{
-      const userCookie = Cookies.get('user');
-      if(typeof(userCookie) !== 'undefined'){
-        const userCookieParse = JSON.parse(userCookie) as IUser;
-        const userParams = {
-          avatar_url: userCookieParse.avatar_url ?? '',
-          name: userCookieParse.name ?? '',
-          login: userCookieParse.login ?? '',
-        };
-        setUserAuth(userParams)
+  useEffect(() => {
+    async function isSession(){
+      const session = await getSession();
+      if(!session){
+        router.push('/login');
+      }else{
+        setUserAuth({
+          avatar_url: session.user.image,
+          name: session.user.name,
+          email: session.user.email
+        });
       }
     }
-    loadUserCookie();
+    isSession();
   },[]);
 
-  async function singIn(userName:string){
-    if(userName === 'move.it'){
-      const userData = {
-        avatar_url: "/favicon.png",
-        name: "Move.it",
-        login: "move.it"
-      };
-      Cookies.set('user',JSON.stringify(userData));
-      router.push('/');
-      return;
-    }
-    try {
-      const response = await fetch(`https://api.github.com/users/${userName}`);
-      const data = await response.json();
-      if(data.message){
-        alert(`${data.message === 'Not Found' ? 'Seu usuário não foi encontrado' : data.message}`);
-        return;
-      }
-      const userData = {
-        avatar_url: data.avatar_url,
-        name: data.name,
-        login: data.login
-      };
-      Cookies.set('user',JSON.stringify(userData));
-      router.push('/');
-    } catch (err) {
-      alert("Github não responde");
-    }
+  async function singIn(providerAuth:string){
+    nextSignIn(providerAuth)
   }
 
-  function singOut(){
-    Cookies.remove('user');
+  async function singOut(){
     Cookies.remove('challengesCompleted');
     Cookies.remove('level');
     Cookies.remove('challengesCompleted');
+    await nextSignOut()
     router.push('/login');
   }
 

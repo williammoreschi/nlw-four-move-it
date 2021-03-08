@@ -1,4 +1,4 @@
-import Head from 'next/head';
+import { getSession } from 'next-auth/client';
 import { GetServerSideProps } from 'next';
 import { ChallengeBox } from '../components/ChallengeBox';
 import { CompletedChallenges } from "../components/CompletedChallenges";
@@ -46,9 +46,9 @@ export default function Home(props:HomeProps) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-
-  const  {level, currentExperience, challengesCompleted, user} = ctx.req.cookies;
-  if(user === undefined){
+  const session = await getSession(ctx);
+  const  {level, currentExperience, challengesCompleted} = ctx.req.cookies;
+  if(!session){
     return {
       redirect: {
         permanent: false,
@@ -58,6 +58,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   }
   return {
     props: {
+      session:session,
       level:Number(level),
       currentExperience:Number(currentExperience),
       challengesCompleted:Number(challengesCompleted) 

@@ -22,17 +22,6 @@
   font-weight: 600;
   font-size: 2rem;
 }
-.container section small{
-  margin-bottom: 1.5rem;
-  color:var(--white);
-  display: block;
-}
-
-.container section small kbd{
-  font-weight: 600;
-  color: var(--green);
-  cursor: pointer;
-}
 
 .container section p{
   display: flex;
@@ -40,57 +29,90 @@
   color: var(--white);
   font-size: 1.3rem;
   opacity: 0.5;
-  margin-bottom: 1.5rem;
+  margin:1rem 0 1.5rem 0;
 }
 
-.container section p img{
-  margin-right: 15px;
-}
-
-.container section div{
-  background: rgb(73,83,184);
-  background: linear-gradient(80deg, rgba(73,83,184,1) 0%, rgba(73,83,184,0.19931722689075626) 100%);
-  height: 3.7rem;
-  display: flex;
-  align-content: center;
-}
-
-.container section div input{
-  background: transparent;
-  border:none;
-  padding-left:1.3rem;
-  padding-right:1.3rem;
-  color: var(--white);
-  opacity: 0.5;
-  outline: var(--blue);
+.container section div{  
   flex: 1;
-  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
 }
-
-.container section div input::placeholder {
-  color: var(--white);
-  opacity: 0.5;
-}
-
 
 .container section div button{
+  flex: 1;
   border:none;
   display: flex;
-  padding: 0 1.3rem;
   align-items: center;
   justify-content: center;
   transition: background-color 0.2s;
-  outline: var(--blue);
-  background: var(--green);
+  color:var(--white);
+  font-weight: 600;
+  border-radius: 0.3rem;
+  height: 3.5rem;
 }
-.container section div button:not(:disabled):hover{
+.container section div button.github{
+  background: rgb(36,41,46);
+}
+.container section div button.facebook{
+  background: #2f55a4;
+}
+.container section div button:hover{
   filter: brightness(0.9);
 }
+.container section div button img{
+  margin-right: 1rem;
+}
 
-.container section div button:disabled{
-  opacity: 0.6; 
-  cursor: not-allowed;
-  background: var(--blue-dark);
+.containerLoading{
+  display: flex;
+  flex: 1;
+  z-index: 1;
+  justify-content: center;
+  align-items: center;
+}
+.containerLoading p{
+  color: #fff;
+  padding-left: 1rem;
+  font-weight: 600;
+}
+@keyframes loadKeyFrame {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 1;
+  }
+  100% {
+    top: 0px;
+    left: 0px;
+    width: 80px;
+    height: 80px;
+    opacity: 0;
+  }
+}
+
+span.loading{
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+span.loading:before,
+span.loading:after {
+  left: 50%;
+  top:50%;
+  content:" ";
+  position: absolute;
+  border: 4px solid #fff;
+  opacity: 1;
+  border-radius: 50%;
+  animation: loadKeyFrame 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+  margin-top: -3px;
+  margin-left: -3px;
+}
+
+span.loading:before {
+  animation-delay: -0.8s;
 }
 
 @media(max-width: 720px){
@@ -98,11 +120,17 @@
     align-items: center;
   }
   .container section{
-   margin-right: 0;
+    margin-right: 0;
   }
-
+  
   .container section header img{
     width: 100%;
     max-width: 100%;
+  }
+  
+}
+@media(max-width: 420px){
+  .container section div{  
+    grid-template-columns: 1fr;
   }
 }

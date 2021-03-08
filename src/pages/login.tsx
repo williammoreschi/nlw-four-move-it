@@ -1,28 +1,17 @@
-
+import { useContext, useState } from 'react';
+import { getSession } from 'next-auth/client';
 import { GetServerSideProps } from 'next';
-import { useContext, useState } from "react";
 import { Seo } from "../components/Seo";
-import { AuthContext } from '../contexts/AuthContext';
 import styles from "../styles/components/Login.module.css";
+import { AuthContext } from '../contexts/AuthContext';
 
-let loginTimeout: NodeJS.Timeout;
-
-export default function Home(props) {
-  const [userName,setUserName] = useState('');
+export default function Home() {
+  const [loading,setLoading] = useState(false);
   const { singIn } = useContext(AuthContext);
 
-  const handleSingIn = async ()=>{
-    clearTimeout(loginTimeout);
-    singIn(userName);
-  }
-
-  function handleUserDefault(usr:string){
-    const parent = document.querySelector(`div.${styles.container}`);
-    parent.querySelector('input').value=usr;
-    setUserName(usr);
-    loginTimeout = setTimeout(()=>{
-      parent.querySelector('button').click();
-    },3 * 1000);
+  function handleSingIn(providerAuth:string){
+    setLoading(true);
+    singIn(providerAuth);
   }
   return (
   <>
@@ -32,18 +21,31 @@ export default function Home(props) {
         <header>
           <img src="/logo-full-white.svg" alt="Move.it" />
         </header>
-        <strong>Bem Vindo</strong>
-        <small>Se você não tiver conta no github, use o usuário padrão (<kbd title="clique para copiar" onClick={()=>handleUserDefault('move.it')}>move.it</kbd>) para conhecer a aplicação</small>
-        <p>
-          <img src="/icons/github.svg" alt="Github"/>
-          Faça login com seu Github para começar
-        </p>
-        <div>
-          <input type="text" placeholder="Digite seu username" onChange={(e)=> setUserName(e.target.value.trim())} />
-          <button type="button" disabled={!userName} onClick={(handleSingIn)} >
-          <img src="/icons/arrow-right.svg" alt="Entrar" />
-          </button>
-        </div>
+        {loading ? (
+          <>
+          <section className={styles.containerLoading}>
+            <span className={styles.loading} />
+            <p>Aguarde...</p>
+          </section>
+          </>
+        ) : (
+          <>
+            <strong>Bem Vindo</strong>
+            <p>
+              Faça login para começar
+            </p>
+            <div>
+                  <button type="button" className={styles.github} onClick={()=>handleSingIn('github')} >
+                  <img src="/icons/github.svg" alt="Github"/>
+                  Github          
+                  </button>
+                  <button type="button" className={styles.facebook} onClick={()=>handleSingIn('facebook')} >
+                  <img src="/icons/facebook.svg" alt="Facebook"/>
+                  Facebook          
+                  </button>
+            </div>
+          </>
+        )}
       </section>
     </div>   
   </>
@@ -51,8 +53,8 @@ export default function Home(props) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const  {user} = ctx.req.cookies;
-  if(user !== undefined){
+  const session = await getSession(ctx);
+  if(session){
     return {
       redirect: {
         permanent: false,
@@ -61,7 +63,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     }
   }
   return {
-    props: {}
+    props: { session }
   }
 }
-

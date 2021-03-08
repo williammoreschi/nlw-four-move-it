@@ -1,11 +1,13 @@
-import { GetServerSideProps } from 'next';
-import { AuthContextProvider } from '../contexts/AuthContext'
-import '../styles/global.css'
+import { Provider } from 'next-auth/client';
+import { AuthContextProvider } from '../contexts/AuthContext';
+import '../styles/global.css';
 function MyApp({ Component, pageProps }) {
   return (
-    <AuthContextProvider>
-      <Component {...pageProps} />
-    </AuthContextProvider>
+    <Provider session={pageProps.session}>
+      <AuthContextProvider>
+        <Component {...pageProps} />
+      </AuthContextProvider>
+    </Provider>
   )
 }
 
